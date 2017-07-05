@@ -72,7 +72,7 @@ public class BookAdapter extends ArrayAdapter<Book> {
         Book currentBook = getItem(position);
 
         // Find the TextView with view ID magnitude
-        TextView magnitudeView = (TextView) listItemView.findViewById(R.id.magnitude);
+        TextView magnitudeView = (TextView) listItemView.findViewById(R.id.thumbnail);
         // Format the magnitude to show 1 decimal place
         String formattedMagnitude = formatMagnitude(currentBook.getMagnitude());
         // Display the magnitude of the current earthquake in that TextView
@@ -116,12 +116,12 @@ public class BookAdapter extends ArrayAdapter<Book> {
         }
 
         // Find the TextView with view ID location
-        TextView primaryLocationView = (TextView) listItemView.findViewById(R.id.primary_location);
+        TextView primaryLocationView = (TextView) listItemView.findViewById(R.id.book_title);
         // Display the location of the current earthquake in that TextView
         primaryLocationView.setText(primaryLocation);
 
         // Find the TextView with view ID location offset
-        TextView locationOffsetView = (TextView) listItemView.findViewById(R.id.location_offset);
+        TextView locationOffsetView = (TextView) listItemView.findViewById(R.id.book_publisher);
         // Display the location offset of the current earthquake in that TextView
         locationOffsetView.setText(locationOffset);
 

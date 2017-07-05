@@ -33,10 +33,10 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity
+public class BooksActivity extends AppCompatActivity
         implements LoaderCallbacks<List<Book>> {
 
-    private static final String LOG_TAG = MainActivity.class.getName();
+    private static final String LOG_TAG = BooksActivity.class.getName();
 
     /**
      * URL for earthquake data from the USGS dataset
@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main_activity);
+        setContentView(R.layout.books_activity);
 
         // Find a reference to the {@link ListView} in the layout
         ListView earthquakeListView = (ListView) findViewById(R.id.list);
