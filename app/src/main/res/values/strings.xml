@@ -1,25 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2016 The Android Open Source Project
-
-     Licensed under the Apache License, Version 2.0 (the "License");
-     you may not use this file except in compliance with the License.
-     You may obtain a copy of the License at
-
-          http://www.apache.org/licenses/LICENSE-2.0
-
-     Unless required by applicable law or agreed to in writing, software
-     distributed under the License is distributed on an "AS IS" BASIS,
-     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-     See the License for the specific language governing permissions and
-     limitations under the License.
--->
-<resources>
-    <!-- Title for the application. [CHAR LIMIT=12] -->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- Title for the application. -->
     <string name="app_name">Book Listing App</string>
 
-    <!-- Text to display in the list when there are no books [CHAR LIMIT=NONE] -->
-    <string name="no_books">No results found.</string>
+    <!-- Text to display in the list when there are no books. -->
+    <string name="no_books">No results found for \"<xliff:g example="Author" id="name">%s</xliff:g>\" :(</string>
 
-    <!-- Error message when there is no internet connectivity [CHAR LIMIT=NONE] -->
+    <!-- Error message when there is no internet connectivity. -->
     <string name="no_internet_connection">No internet connection.</string>
+
+    <!-- Welcome message -->
+    <string name="welcome">Welcome to yet another Book Listing App!</string>
+
+    <!-- Hint for the edit boxes. -->
+    <string name="type_your_search">What are you looking for?</string>
+
+    <!-- Text for the search button. -->
+    <string name="search_in_google">Search in Google Books</string>
+
+    <!-- Error message for empty searchs. -->
+    <string name="empty_search">Search string can\'t be empty</string>
+
+    <!-- Base url for searching books by author using te Google Books API. -->
+    <string name="base_url">https://www.googleapis.com/books/v1/volumes?q=<xliff:g example="Author" id="name">%s</xliff:g>&#038;maxResults=40</string>
+
+    <!-- Content descriptions for images. -->
+    <string name="main_icon_content_description">Book Listing App icon</string>
+    <string name="search_icon_content_description">Search icon</string>
+    <string name="thumbnail_content_description">Book cover</string>
+    <string name="star_content_description">Star</string>
 </resources>

@@ -1,54 +1,43 @@
-<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2016 The Android Open Source Project
-
-     Licensed under the Apache License, Version 2.0 (the "License");
-     you may not use this file except in compliance with the License.
-     You may obtain a copy of the License at
-
-          http://www.apache.org/licenses/LICENSE-2.0
-
-     Unless required by applicable law or agreed to in writing, software
-     distributed under the License is distributed on an "AS IS" BASIS,
-     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-     See the License for the specific language governing permissions and
-     limitations under the License.
---><!-- Layout for a single list item that displays an book -->
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="8dp"
-    android:layout_marginLeft="16dp"
-    android:layout_marginRight="16dp"
-    android:layout_marginTop="8dp"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp">
 
     <ImageView
-        android:id="@+id/thumbnail"
-        android:layout_width="128dp"
-        android:layout_height="166dp"
+        android:id="@+id/book_thumbnail"
+        android:layout_width="77dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="8dp"
         android:background="@color/colorPrimary"
-        android:gravity="center"
+        android:contentDescription="@string/thumbnail_content_description"
+        android:scaleType="centerCrop"
         android:src="@drawable/default_cover" />
 
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginStart="16dp"
         android:layout_weight="1"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingTop="8dp">
 
         <TextView
             android:id="@+id/book_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ellipsize="end"
+            android:fontFamily="sans-serif-medium"
             android:maxLines="2"
             android:textAllCaps="true"
-            android:textColor="@color/textColorEarthquakeLocation"
-            android:textSize="16sp"
+            android:textColor="@color/colorPrimaryDark"
             android:textStyle="bold"
-            tools:text="Long placeholder location that should wrap to more than 2 lines of text" />
+            tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -57,63 +46,53 @@
 
             <ImageView
                 android:id="@+id/book_star1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
+                style="@style/rating_star_style"
                 android:src="@drawable/ic_star_rate_black_18dp" />
 
             <ImageView
                 android:id="@+id/book_star2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
+                style="@style/rating_star_style"
                 android:src="@drawable/ic_star_rate_black_18dp" />
 
             <ImageView
                 android:id="@+id/book_star3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
+                style="@style/rating_star_style"
                 android:src="@drawable/ic_star_rate_black_18dp" />
 
             <ImageView
                 android:id="@+id/book_star4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
+                style="@style/rating_star_style"
                 android:src="@drawable/ic_star_rate_black_18dp" />
 
             <ImageView
                 android:id="@+id/book_star5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
+                style="@style/rating_star_style"
                 android:src="@drawable/ic_star_rate_black_18dp" />
         </LinearLayout>
 
         <TextView
-            android:id="@+id/book_author"
+            android:id="@+id/book_authors"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:ellipsize="end"
+            android:fontFamily="sans-serif-medium"
             android:maxLines="2"
             android:textAllCaps="true"
-            android:textColor="@color/textColorEarthquakeLocation"
-            android:textSize="16sp"
-            tools:text="Long placeholder location that should wrap to more than 2 lines of text" />
+            android:textColor="@color/colorPrimary"
+            tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit" />
 
         <TextView
-            android:id="@+id/book_publisher"
+            android:id="@+id/book_publisher_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:ellipsize="end"
             android:fontFamily="sans-serif-medium"
             android:maxLines="1"
-            android:textColor="@color/textColorEarthquakeDetails"
+            android:textAllCaps="true"
             android:textSize="12sp"
-            tools:text="Publisher - Date - Pages" />
+            tools:text="Publisher - Date" />
 
         <TextView
             android:id="@+id/book_description"
@@ -122,34 +101,8 @@
             android:layout_marginTop="4dp"
             android:ellipsize="end"
             android:fontFamily="sans-serif-medium"
-            android:maxLines="4"
-            android:textColor="@color/textColorEarthquakeLocation"
+            android:maxLines="3"
             android:textSize="12sp"
             tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum." />
-
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:drawableEnd="@drawable/ic_exit_to_app_black_18dp"
-                android:drawablePadding="8dp"
-                android:gravity="fill"
-                android:hapticFeedbackEnabled="false"
-                android:text="Info" />
-
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:drawableEnd="@drawable/ic_exit_to_app_black_18dp"
-                android:drawablePadding="8dp"
-                android:gravity="fill"
-                android:hapticFeedbackEnabled="false"
-                android:text="Buy" />
-        </LinearLayout>
     </LinearLayout>
 </LinearLayout>

@@ -16,203 +16,104 @@
 package com.example.android.booklistingapp;
 
 import android.content.Context;
-import android.graphics.drawable.GradientDrawable;
-import android.support.v4.content.ContextCompat;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 /**
- * An {@link BookAdapter} knows how to create a list item layout for each earthquake
- * in the data source (a list of {@link Book} objects).
- *
- * These list item layouts will be provided to an adapter view like ListView
- * to be displayed to the user.
+ * An {@link BookAdapter} knows how to create a list item layout for each book in the data source (a
+ * list of {@link Book} objects). These list item layouts will be provided to an adapter view like
+ * ListView to be displayed to the user.
  */
-public class BookAdapter extends ArrayAdapter<Book> {
-
-    /**
-     * The part of the location string from the USGS service that we use to determine
-     * whether or not there is a location offset present ("5km N of Cairo, Egypt").
-     */
-    private static final String LOCATION_SEPARATOR = " of ";
-
+class BookAdapter extends ArrayAdapter<Book> {
     /**
      * Constructs a new {@link BookAdapter}.
      *
-     * @param context of the app
-     * @param books is the list of books, which is the data source of the adapter
+     * @param context of the app.
+     * @param books   is the list of books, which is the data source of the adapter.
      */
-    public BookAdapter(Context context, List<Book> books) {
+    BookAdapter(Context context, List<Book> books) {
         super(context, 0, books);
     }
 
     /**
-     * Returns a list item view that displays information about the earthquake at the given position
-     * in the list of earthquakes.
+     * Returns a list item view that displays information about the book at the given position in
+     * the list of books.
+     *
+     * @param position    is the position of the item within the adapter's data set of the item whose view we want.
+     * @param convertView is the old view to reuse, if possible.
+     * @param parent      is the  parent that this view will eventually be attached to.
+     * @return a View corresponding to the data at the specified position.
      */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        // Check if there is an existing list item view (called convertView) that we can reuse,
-        // otherwise, if convertView is null, then inflate a new list item layout.
+        // Check if there is an existing list item view (called convertView) that we can reuse.
+        // Otherwise, if convertView is null, then inflate a new list item layout.
         View listItemView = convertView;
         if (listItemView == null) {
-            listItemView = LayoutInflater.from(getContext()).inflate(
-                    R.layout.list_item, parent, false);
+            listItemView = LayoutInflater.from(getContext()).inflate(R.layout.list_item, parent, false);
         }
 
-        // Find the earthquake at the given position in the list of earthquakes
+        // Find the book at the given position in the list of books.
         Book currentBook = getItem(position);
 
-        // Find the TextView with view ID magnitude
-        TextView magnitudeView = (TextView) listItemView.findViewById(R.id.thumbnail);
-        // Format the magnitude to show 1 decimal place
-        String formattedMagnitude = formatMagnitude(currentBook.getMagnitude());
-        // Display the magnitude of the current earthquake in that TextView
-        magnitudeView.setText(formattedMagnitude);
+        // Set the image of the book. If there is no image, it will show the default image
+        // "default_cover.jpg".
+        Bitmap image = currentBook.getImage();
+        if (image != null) {
+            ImageView thumbnailImage = (ImageView) listItemView.findViewById(R.id.book_thumbnail);
+            thumbnailImage.setImageBitmap(image);
+        }
 
-        // Set the proper background color on the magnitude circle.
-        // Fetch the background from the TextView, which is a GradientDrawable.
-        GradientDrawable magnitudeCircle = (GradientDrawable) magnitudeView.getBackground();
-        // Get the appropriate background color based on the current earthquake magnitude
-        int magnitudeColor = getMagnitudeColor(currentBook.getMagnitude());
-        // Set the color on the magnitude circle
-        magnitudeCircle.setColor(magnitudeColor);
+        // Set the title of the book. If there is no title, hide the title view.
+        TextView titleView = (TextView) listItemView.findViewById(R.id.book_title);
+        String title = currentBook.getTitle();
+        if (!title.isEmpty()) titleView.setText(title);
+        else titleView.setVisibility(View.GONE);
 
-        // Get the original location string from the Book object,
-        // which can be in the format of "5km N of Cairo, Egypt" or "Pacific-Antarctic Ridge".
-        String originalLocation = currentBook.getLocation();
+        // Set the rating section for the book. Given a maximum of 5 stars rating, display stars
+        // with index below or equal to the rating of the book and hide stars with index above the
+        // rating of the book.
+        int rating = currentBook.getStars();
+        for (int i = 1; i <= 5; i++) {
+            int resource = listItemView.getResources().getIdentifier("book_star" + i, "id", this.getContext().getPackageName());
+            ImageView starImageView = (ImageView) listItemView.findViewById(resource);
+            if (i <= rating) starImageView.setVisibility(View.VISIBLE);
+            else starImageView.setVisibility(View.GONE);
+        }
 
-        // If the original location string (i.e. "5km N of Cairo, Egypt") contains
-        // a primary location (Cairo, Egypt) and a location offset (5km N of that city)
-        // then store the primary location separately from the location offset in 2 Strings,
-        // so they can be displayed in 2 TextViews.
-        String primaryLocation;
-        String locationOffset;
+        // Set the list of authors of the book. If there is no artists, hide the artists view.
+        TextView authorsView = (TextView) listItemView.findViewById(R.id.book_authors);
+        String authors = currentBook.getAuthors();
+        if (!authors.isEmpty()) authorsView.setText(authors);
+        else authorsView.setVisibility(View.GONE);
 
-        // Check whether the originalLocation string contains the " of " text
-        if (originalLocation.contains(LOCATION_SEPARATOR)) {
-            // Split the string into different parts (as an array of Strings)
-            // based on the " of " text. We expect an array of 2 Strings, where
-            // the first String will be "5km N" and the second String will be "Cairo, Egypt".
-            String[] parts = originalLocation.split(LOCATION_SEPARATOR);
-            // Location offset should be "5km N " + " of " --> "5km N of"
-            locationOffset = parts[0] + LOCATION_SEPARATOR;
-            // Primary location should be "Cairo, Egypt"
-            primaryLocation = parts[1];
+        // Set the publisher / year of publication of the book.
+        TextView publicationView = (TextView) listItemView.findViewById(R.id.book_publisher_date);
+        String publisher = currentBook.getPublisher();
+        String publishedDate = currentBook.getPublishedDate();
+        if (!publisher.isEmpty()) {
+            if (!publishedDate.isEmpty()) publicationView.setText(publisher + ", " + publishedDate);
+            else publicationView.setText(publisher);
         } else {
-            // Otherwise, there is no " of " text in the originalLocation string.
-            // Hence, set the default location offset to say "Near the".
-            locationOffset = getContext().getString(R.string.near_the);
-            // The primary location will be the full location string "Pacific-Antarctic Ridge".
-            primaryLocation = originalLocation;
+            if (!publishedDate.isEmpty()) publicationView.setText(publishedDate);
+            else publicationView.setVisibility(View.GONE);
         }
 
-        // Find the TextView with view ID location
-        TextView primaryLocationView = (TextView) listItemView.findViewById(R.id.book_title);
-        // Display the location of the current earthquake in that TextView
-        primaryLocationView.setText(primaryLocation);
+        // Set the short description of the book. If there is no short description, hide the
+        // description view.
+        TextView descriptionView = (TextView) listItemView.findViewById(R.id.book_description);
+        String description = currentBook.getDescription();
+        if (!description.isEmpty()) descriptionView.setText(description);
+        else descriptionView.setVisibility(View.GONE);
 
-        // Find the TextView with view ID location offset
-        TextView locationOffsetView = (TextView) listItemView.findViewById(R.id.book_publisher);
-        // Display the location offset of the current earthquake in that TextView
-        locationOffsetView.setText(locationOffset);
-
-        // Create a new Date object from the time in milliseconds of the earthquake
-        Date dateObject = new Date(currentBook.getTimeInMilliseconds());
-
-        // Find the TextView with view ID date
-        TextView dateView = (TextView) listItemView.findViewById(R.id.date);
-        // Format the date string (i.e. "Mar 3, 1984")
-        String formattedDate = formatDate(dateObject);
-        // Display the date of the current earthquake in that TextView
-        dateView.setText(formattedDate);
-
-        // Find the TextView with view ID time
-        TextView timeView = (TextView) listItemView.findViewById(R.id.time);
-        // Format the time string (i.e. "4:30PM")
-        String formattedTime = formatTime(dateObject);
-        // Display the time of the current earthquake in that TextView
-        timeView.setText(formattedTime);
-
-        // Return the list item view that is now showing the appropriate data
+        // Return the list item view that is now showing the appropriate data.
         return listItemView;
-    }
-
-    /**
-     * Return the color for the magnitude circle based on the intensity of the earthquake.
-     *
-     * @param magnitude of the earthquake
-     */
-    private int getMagnitudeColor(double magnitude) {
-        int magnitudeColorResourceId;
-        int magnitudeFloor = (int) Math.floor(magnitude);
-        switch (magnitudeFloor) {
-            case 0:
-            case 1:
-                magnitudeColorResourceId = R.color.magnitude1;
-                break;
-            case 2:
-                magnitudeColorResourceId = R.color.magnitude2;
-                break;
-            case 3:
-                magnitudeColorResourceId = R.color.magnitude3;
-                break;
-            case 4:
-                magnitudeColorResourceId = R.color.magnitude4;
-                break;
-            case 5:
-                magnitudeColorResourceId = R.color.magnitude5;
-                break;
-            case 6:
-                magnitudeColorResourceId = R.color.magnitude6;
-                break;
-            case 7:
-                magnitudeColorResourceId = R.color.magnitude7;
-                break;
-            case 8:
-                magnitudeColorResourceId = R.color.magnitude8;
-                break;
-            case 9:
-                magnitudeColorResourceId = R.color.magnitude9;
-                break;
-            default:
-                magnitudeColorResourceId = R.color.magnitude10plus;
-                break;
-        }
-
-        return ContextCompat.getColor(getContext(), magnitudeColorResourceId);
-    }
-
-    /**
-     * Return the formatted magnitude string showing 1 decimal place (i.e. "3.2")
-     * from a decimal magnitude value.
-     */
-    private String formatMagnitude(double magnitude) {
-        DecimalFormat magnitudeFormat = new DecimalFormat("0.0");
-        return magnitudeFormat.format(magnitude);
-    }
-
-    /**
-     * Return the formatted date string (i.e. "Mar 3, 1984") from a Date object.
-     */
-    private String formatDate(Date dateObject) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("LLL dd, yyyy");
-        return dateFormat.format(dateObject);
-    }
-
-    /**
-     * Return the formatted date string (i.e. "4:30 PM") from a Date object.
-     */
-    private String formatTime(Date dateObject) {
-        SimpleDateFormat timeFormat = new SimpleDateFormat("h:mm a");
-        return timeFormat.format(dateObject);
     }
 }

@@ -15,64 +15,83 @@
  */
 package com.example.android.booklistingapp;
 
+import android.graphics.Bitmap;
+
 /**
  * An {@link Book} object contains information related to a single earthquake.
  */
-public class Book {
-
-    /** Magnitude of the earthquake */
-    private double mMagnitude;
-
-    /** Location of the earthquake */
-    private String mLocation;
-
-    /** Time of the earthquake */
-    private long mTimeInMilliseconds;
-
-    /** Website URL of the earthquake */
-    private String mUrl;
+class Book {
+    private String title;           // Title of the book.
+    private String authors;         // Authors of the books, comma separated.
+    private String publisher;       // Publisher of the book.
+    private String publishedDate;   // Publication date of the book.
+    private int pages;              // Number of pages of the book.
+    private int stars;              // Book rating based on readers' reviews (maximum 5).
+    private String description;     // Short description of the book.
+    private Bitmap image;           // Bitmap image of the cover of the book.
+    private String url;             // Url for the webpage of the book at play.google.com.
 
     /**
      * Constructs a new {@link Book} object.
      *
-     * @param magnitude is the magnitude (size) of the earthquake
-     * @param location is the location where the earthquake happened
-     * @param timeInMilliseconds is the time in milliseconds (from the Epoch) when the
-     *                           earthquake happened
-     * @param url is the website URL to find more details about the earthquake
+     * @param title         is the title of the book.
+     * @param authors       is the list of authors.
+     * @param publisher     is the publisher of the book.
+     * @param publishedDate is the publication date.
+     * @param pages         is the number of pages.
+     * @param stars         is the rating of the book.
+     * @param description   is the short description of the book.
+     * @param image         is the bitmap image with the cover of the book.
+     * @param url           is the url for the webpage of the book at play.google.com.
      */
-    public Book(double magnitude, String location, long timeInMilliseconds, String url) {
-        mMagnitude = magnitude;
-        mLocation = location;
-        mTimeInMilliseconds = timeInMilliseconds;
-        mUrl = url;
+    Book(String title, String authors, String publisher, String publishedDate, int pages, int stars, String description, Bitmap image, String url) {
+        this.title = title;
+        this.authors = authors;
+        this.publisher = publisher;
+        this.publishedDate = publishedDate;
+        this.pages = pages;
+        this.stars = stars;
+        this.description = description;
+        this.image = image;
+        this.url = url;
     }
 
     /**
-     * Returns the magnitude of the earthquake.
+     * Getters.
      */
-    public double getMagnitude() {
-        return mMagnitude;
+    String getTitle() {
+        return title;
     }
 
-    /**
-     * Returns the location of the earthquake.
-     */
-    public String getLocation() {
-        return mLocation;
+    String getAuthors() {
+        return authors;
     }
 
-    /**
-     * Returns the time of the earthquake.
-     */
-    public long getTimeInMilliseconds() {
-        return mTimeInMilliseconds;
+    String getPublisher() {
+        return publisher;
     }
 
-    /**
-     * Returns the website URL to find more information about the earthquake.
-     */
-    public String getUrl() {
-        return mUrl;
+    String getPublishedDate() {
+        return publishedDate;
+    }
+
+    int getPages() {
+        return pages;
+    }
+
+    int getStars() {
+        return stars;
+    }
+
+    String getDescription() {
+        return description;
+    }
+
+    Bitmap getImage() {
+        return image;
+    }
+
+    String getUrl() {
+        return url;
     }
 }
