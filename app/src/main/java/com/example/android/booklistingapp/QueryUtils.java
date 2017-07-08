@@ -162,7 +162,9 @@ final class QueryUtils {
             JSONObject baseJsonResponse = new JSONObject(bookJSON);
 
             // Extract the JSONArray associated with the key called "items", which represents a list
-            // of items (or books).
+            // of items (or books). If there's no "items" array, exit returning null before trying
+            // to extract the JSONArray.
+            if (baseJsonResponse.isNull("items")) return null;
             JSONArray bookArray = baseJsonResponse.getJSONArray("items");
 
             // For each book in the bookArray, create an {@link Book} object.
@@ -173,6 +175,7 @@ final class QueryUtils {
 
                 // For a given book, extract the JSONObject associated with the key called
                 // "volumeInfo", which represents a list of all properties for that book.
+                if (currentBook.isNull("volumeInfo")) break;
                 JSONObject volumeInfo = currentBook.getJSONObject("volumeInfo");
 
                 // Extract the value for the key called "title", which represents the title of the

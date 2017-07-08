@@ -15,7 +15,6 @@
  */
 package com.example.android.booklistingapp;
 
-import android.app.LoaderManager;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.Context;
 import android.content.Intent;
@@ -25,7 +24,9 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -36,28 +37,40 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class BooksActivity extends AppCompatActivity implements LoaderCallbacks<List<Book>> {
     private static final int BOOK_LOADER_ID = 1;    // Constant value for the book loader ID.
+
+    // Using the ButterKnife library for view injection.
+    @BindView(R.id.list)
+    ListView bookListView;
+    @BindView(R.id.loading_indicator)
+    View loadingIndicator;
+    @BindView(R.id.empty_view)
+    TextView mEmptyStateTextView;
+    @BindView(R.id.search_edittext2)
+    EditText searchEditText;
+    @BindView(R.id.search_button2)
+    ImageView searchButton;
+
     private BookAdapter mAdapter;                   // Adapter for the list of books.
-    private TextView mEmptyStateTextView;           // TextView that is displayed when the list is empty.
     private String searchString = "";               // String for searching on Google Books.
     private String url = "";                        // Url for getting the JSON document from Google Books.
-    private ListView bookListView;                  // List view for showing all the books.
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.books_activity);
+        ButterKnife.bind(this);
 
         // Get search string from main activity and build search url.
         searchString = getIntent().getExtras().getString("searchString");
         url = getResources().getString(R.string.base_url, searchString);
-        final EditText searchEditText = (EditText) findViewById(R.id.search_edittext2);
         searchEditText.setText(searchString);
 
         // Find a reference to the {@link ListView} in the layout.
-        bookListView = (ListView) findViewById(R.id.list);
-        mEmptyStateTextView = (TextView) findViewById(R.id.empty_view);
         bookListView.setEmptyView(mEmptyStateTextView);
 
         // Create a new adapter that takes an empty list of books as input.
@@ -84,41 +97,62 @@ public class BooksActivity extends AppCompatActivity implements LoaderCallbacks<
         ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
         if (networkInfo != null && networkInfo.isConnected()) {
-            // Get a reference to the LoaderManager, in order to interact with loaders.
-            LoaderManager loaderManager = getLoaderManager();
-
             // Initialize the loader. Pass in the int ID constant defined above and pass in null for
             // the bundle. Pass in this activity for the LoaderCallbacks parameter (which is valid
             // because this activity implements the LoaderCallbacks interface).
-            loaderManager.initLoader(BOOK_LOADER_ID, null, this);
-        } else { // Otherwise, display error.
-
-            // First, hide loading indicator so error message will be visible.
-            View loadingIndicator = findViewById(R.id.loading_indicator);
+            getLoaderManager().initLoader(BOOK_LOADER_ID, null, this);
+        } else {
+            // Otherwise, display error.
             loadingIndicator.setVisibility(View.GONE);
-
-            // Update empty state with no connection error message
             mEmptyStateTextView.setText(R.string.no_internet_connection);
         }
 
         // Set onClick behaviour for the search button.
-        ImageView searchButton = (ImageView) findViewById(R.id.search_button2);
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String searchString = searchEditText.getText().toString();
-                if (searchString.isEmpty()) {
-                    // Search string can not be empty.
-                    Toast toast = Toast.makeText(getApplicationContext(), R.string.empty_search, Toast.LENGTH_SHORT);
-                    toast.show();
-                } else {
-                    // Open BooksActivity for performing the search and displaying results.
-                    Intent intent = new Intent(BooksActivity.this, BooksActivity.class);
-                    intent.putExtra("searchString", searchString);
-                    startActivity(intent);
-                }
+                search();
             }
         });
+
+        // Set action to perform when "Ok" key is pressed when typing a search string on the edit
+        // text.
+        searchEditText.setFocusableInTouchMode(true);
+        searchEditText.requestFocus();
+        searchEditText.setOnKeyListener(new View.OnKeyListener() {
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                // If the event is a key-down event on the "enter" button.
+                if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                    // Perform action on key press.
+                    search();
+                    return true;
+                }
+                return false;
+            }
+        });
+    }
+
+    /**
+     * Order a new search from the string typed on the edit text.
+     */
+    void search() {
+        searchString = searchEditText.getText().toString();
+        if (searchString.isEmpty()) {
+            // Search string can not be empty.
+            Toast toast = Toast.makeText(getApplicationContext(), R.string.empty_search, Toast.LENGTH_SHORT);
+            toast.show();
+        } else {
+            // Hide the keyboard.
+            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow(searchEditText.getWindowToken(), 0);
+
+            // Restart loader to perform the new search.
+            url = getResources().getString(R.string.base_url, searchString);
+            mAdapter.clear();
+            mEmptyStateTextView.setVisibility(View.GONE);
+            loadingIndicator.setVisibility(View.VISIBLE);
+            getLoaderManager().restartLoader(BOOK_LOADER_ID, null, BooksActivity.this);
+        }
     }
 
     @Override
@@ -130,7 +164,6 @@ public class BooksActivity extends AppCompatActivity implements LoaderCallbacks<
     @Override
     public void onLoadFinished(Loader<List<Book>> loader, List<Book> books) {
         // Hide loading indicator because the data has been loaded.
-        View loadingIndicator = findViewById(R.id.loading_indicator);
         loadingIndicator.setVisibility(View.GONE);
 
         // Set empty state text to display "No results found for..."

@@ -26,12 +26,27 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * An {@link BookAdapter} knows how to create a list item layout for each book in the data source (a
  * list of {@link Book} objects). These list item layouts will be provided to an adapter view like
  * ListView to be displayed to the user.
  */
 class BookAdapter extends ArrayAdapter<Book> {
+    // Using the ButterKnife library for view injection.
+    @BindView(R.id.book_thumbnail)
+    ImageView thumbnailImage;
+    @BindView(R.id.book_title)
+    TextView titleView;
+    @BindView(R.id.book_authors)
+    TextView authorsView;
+    @BindView(R.id.book_publisher_date)
+    TextView publicationView;
+    @BindView(R.id.book_description)
+    TextView descriptionView;
+
     /**
      * Constructs a new {@link BookAdapter}.
      *
@@ -59,6 +74,7 @@ class BookAdapter extends ArrayAdapter<Book> {
         if (listItemView == null) {
             listItemView = LayoutInflater.from(getContext()).inflate(R.layout.list_item, parent, false);
         }
+        ButterKnife.bind(this, listItemView);
 
         // Find the book at the given position in the list of books.
         Book currentBook = getItem(position);
@@ -67,12 +83,10 @@ class BookAdapter extends ArrayAdapter<Book> {
         // "default_cover.jpg".
         Bitmap image = currentBook.getImage();
         if (image != null) {
-            ImageView thumbnailImage = (ImageView) listItemView.findViewById(R.id.book_thumbnail);
             thumbnailImage.setImageBitmap(image);
         }
 
         // Set the title of the book. If there is no title, hide the title view.
-        TextView titleView = (TextView) listItemView.findViewById(R.id.book_title);
         String title = currentBook.getTitle();
         if (!title.isEmpty()) titleView.setText(title);
         else titleView.setVisibility(View.GONE);
@@ -89,13 +103,11 @@ class BookAdapter extends ArrayAdapter<Book> {
         }
 
         // Set the list of authors of the book. If there is no artists, hide the artists view.
-        TextView authorsView = (TextView) listItemView.findViewById(R.id.book_authors);
         String authors = currentBook.getAuthors();
         if (!authors.isEmpty()) authorsView.setText(authors);
         else authorsView.setVisibility(View.GONE);
 
         // Set the publisher / year of publication of the book.
-        TextView publicationView = (TextView) listItemView.findViewById(R.id.book_publisher_date);
         String publisher = currentBook.getPublisher();
         String publishedDate = currentBook.getPublishedDate();
         if (!publisher.isEmpty()) {
@@ -108,7 +120,6 @@ class BookAdapter extends ArrayAdapter<Book> {
 
         // Set the short description of the book. If there is no short description, hide the
         // description view.
-        TextView descriptionView = (TextView) listItemView.findViewById(R.id.book_description);
         String description = currentBook.getDescription();
         if (!description.isEmpty()) descriptionView.setText(description);
         else descriptionView.setVisibility(View.GONE);
