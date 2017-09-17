@@ -6,7 +6,7 @@ The base URL used for fetching results from Google Books API is https://www.goog
 
 Some screen captures:
 
-<IMG src="https://github.com/dburgosp/BookListingApp/blob/master/img_main_activity.jpg?raw=true" width="150" height="279" title="Main search screen" alt="Main search screen"/> <IMG src="https://github.com/dburgosp/BookListingApp/blob/master/img_listview_activity.jpg?raw=true" width="150" height="279" title="Displaying results" alt="Displaying results"/> <IMG src="https://github.com/dburgosp/BookListingApp/blob/master/img_empty_search.jpg?raw=true" width="150" height="279" title="Search string cannot be empty" alt="Search string cannot be empty"/> <IMG src="https://github.com/dburgosp/BookListingApp/blob/master/img_google_books.jpg?raw=true" width="150" height="279" title="Book page at Google Books" alt="Book page at Google Books"/>
+<IMG src="https://github.com/dburgosp/BookListingApp/blob/master/img_main_activity.jpg?raw=true" width="150" height="279" title="Main search screen" alt="Main search screen"/> <IMG src="https://github.com/dburgosp/BookListingApp/blob/master/img_listview.jpg?raw=true" width="150" height="279" title="Displaying results" alt="Displaying results"/> <IMG src="https://github.com/dburgosp/BookListingApp/blob/master/img_empty_search.jpg?raw=true" width="150" height="279" title="Search string cannot be empty" alt="Search string cannot be empty"/> <IMG src="https://github.com/dburgosp/BookListingApp/blob/master/img_google_books.jpg?raw=true" width="150" height="279" title="Book page at Google Books" alt="Book page at Google Books"/>
 
 # Project Specification
 
