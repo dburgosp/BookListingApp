@@ -2,6 +2,12 @@
 
 This is a simple Android Studio project for the [Android Basics Nanodegree](https://www.udacity.com/course/android-basics-nanodegree-by-google--nd803) given by Udacity and Google. The goal is to design and create the structure of a Book Listing app which would allow a user to get a list of published books on a given topic, using the [Google Books API](https://developers.google.com/books/) in order to fetch results and display them to the user.
 
+The base URL used for fetching results from Google Books API is https://www.googleapis.com/books/v1/volumes?q=author_name&maxResults=40. The string '*author_name*' is taken from an [EditText](https://developer.android.com/reference/android/widget/EditText.html).
+
+Some screen captures:
+
+<IMG src="https://github.com/dburgosp/BookListingApp/blob/master/img_main_activity.jpg?raw=true" width="150" height="279" title="Main search screen" alt="Main search screen"/> <IMG src="https://github.com/dburgosp/BookListingApp/blob/master/img_listview_activity.jpg?raw=true" width="150" height="279" title="Displaying results" alt="Displaying results"/> <IMG src="https://github.com/dburgosp/BookListingApp/blob/master/img_empty_search.jpg?raw=true" width="150" height="279" title="Search string cannot be empty" alt="Search string cannot be empty"/> <IMG src="https://github.com/dburgosp/BookListingApp/blob/master/img_google_books.jpg?raw=true" width="150" height="279" title="Book page at Google Books" alt="Book page at Google Books"/>
+
 # Project Specification
 
 ## Layout
@@ -28,7 +34,7 @@ This is a simple Android Studio project for the [Android Basics Nanodegree](http
 5. **JSON Parsing**. The JSON response is parsed correctly, and relevant information is stored in the app.
 6. **ListView Population**. The [ListView](https://developer.android.com/reference/android/widget/ListView.html) is properly populated with the information parsed from the JSON response.
 7. **No Data Message**. When there is no data to display, the app shows a default [TextView](https://developer.android.com/reference/android/widget/TextView.html) that informs the user how to populate the list.
-8. **External Libraries and Packages**. The intent of this project is to give you practice writing raw Java code using the necessary classes provided by the Android framework; therefore, the use of external libraries for core functionality will not be permitted to complete this project.
+8. **External Libraries and Packages**. The intent of this project is to practice writing raw Java code using the necessary classes provided by the Android framework; therefore, the use of external libraries for core functionality is not permitted to complete this project.
 
 ## Code Readability
 
